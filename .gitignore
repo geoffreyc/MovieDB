@@ -40,7 +40,7 @@ pip-log.txt
 #################
 ## Eclipse
 #################
-
+.idea/
 *.pydevproject
 .project
 .metadata
