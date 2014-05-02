@@ -2,12 +2,12 @@ from django.db import models
 
 
 class Movie(models.Model):
-    api_id = models.BigIntegerField(unique=True)
+    api_id = models.BigIntegerField(null=True, default=None)
     imdb_id = models.BigIntegerField(null=True)
     title = models.TextField(null=False)
-    release_year = models.DateField(null=False)
+    release_year = models.DateField(null=True)
     synopsy = models.TextField(null=True)
-    rating = models.BigIntegerField(null=False, default=0)
+    rating = models.FloatField(null=False, default=0)
     poster = models.TextField(null=True)
     additional_content = models.TextField(null=True)
     movie_internal_order = models.PositiveIntegerField(null=False, default=1)
