@@ -16,6 +16,12 @@ class Movie(models.Model):
     categories = models.ManyToManyField("MovieCategory")
     actors = models.ManyToManyField("MovieActor")
 
+
+class MovieOld(models.Model):
+    movie = models.OneToOneField(Movie, primary_key=True)
+    old_id = models.BigIntegerField()
+
+
 class MovieActor(models.Model):
     name = models.TextField(null=False)
     #movie = models.ManyToManyField(Movie)
