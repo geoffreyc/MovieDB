@@ -85,3 +85,4 @@ $RECYCLE.BIN/
 # Mac crap
 .DS_Store
 
+db.sqlite3.old

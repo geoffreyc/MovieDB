@@ -11,17 +11,18 @@ class Migration(SchemaMigration):
         # Adding model 'Movie'
         db.create_table(u'movie_movie', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('api_id', self.gf('django.db.models.fields.BigIntegerField')(unique=True)),
+            ('api_id', self.gf('django.db.models.fields.BigIntegerField')(default=None, null=True)),
             ('imdb_id', self.gf('django.db.models.fields.BigIntegerField')(null=True)),
             ('title', self.gf('django.db.models.fields.TextField')()),
-            ('release_year', self.gf('django.db.models.fields.DateField')()),
+            ('release_year', self.gf('django.db.models.fields.DateField')(null=True)),
             ('synopsy', self.gf('django.db.models.fields.TextField')(null=True)),
-            ('rating', self.gf('django.db.models.fields.BigIntegerField')(default=0)),
+            ('rating', self.gf('django.db.models.fields.FloatField')(default=0)),
             ('poster', self.gf('django.db.models.fields.TextField')(null=True)),
             ('additional_content', self.gf('django.db.models.fields.TextField')(null=True)),
             ('movie_internal_order', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
             ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('date_updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('trailer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['movie.MovieTrailer'], null=True)),
         ))
         db.send_create_signal(u'movie', ['Movie'])
 
@@ -43,6 +44,13 @@ class Migration(SchemaMigration):
         ))
         db.create_unique(m2m_table_name, ['movie_id', 'movieactor_id'])
 
+        # Adding model 'MovieOld'
+        db.create_table(u'movie_movieold', (
+            ('movie', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['movie.Movie'], unique=True, primary_key=True)),
+            ('old_id', self.gf('django.db.models.fields.BigIntegerField')()),
+        ))
+        db.send_create_signal(u'movie', ['MovieOld'])
+
         # Adding model 'MovieActor'
         db.create_table(u'movie_movieactor', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -61,7 +69,6 @@ class Migration(SchemaMigration):
         db.create_table(u'movie_movietrailer', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('movie', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['movie.Movie'])),
         ))
         db.send_create_signal(u'movie', ['MovieTrailer'])
 
@@ -76,12 +83,25 @@ class Migration(SchemaMigration):
         # Adding model 'MovieStock'
         db.create_table(u'movie_moviestock', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('MovieStockType', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['movie.MovieStockType'])),
-            ('Movie', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['movie.Movie'])),
+            ('moviestocktype', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['movie.MovieStockType'])),
+            ('movie', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['movie.Movie'])),
+            ('original', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('quantity', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
             ('location', self.gf('django.db.models.fields.CharField')(max_length=255, null=True)),
         ))
         db.send_create_signal(u'movie', ['MovieStock'])
+
+        # Adding model 'MovieRented'
+        db.create_table(u'movie_movierented', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('moviestock', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['movie.MovieStock'])),
+            ('renter', self.gf('django.db.models.fields.TextField')()),
+            ('renterEmail', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True)),
+            ('note', self.gf('django.db.models.fields.TextField')(null=True)),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('date_updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        ))
+        db.send_create_signal(u'movie', ['MovieRented'])
 
 
     def backwards(self, orm):
@@ -93,6 +113,9 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field actors on 'Movie'
         db.delete_table(db.shorten_name(u'movie_movie_actors'))
+
+        # Deleting model 'MovieOld'
+        db.delete_table(u'movie_movieold')
 
         # Deleting model 'MovieActor'
         db.delete_table(u'movie_movieactor')
@@ -109,13 +132,16 @@ class Migration(SchemaMigration):
         # Deleting model 'MovieStock'
         db.delete_table(u'movie_moviestock')
 
+        # Deleting model 'MovieRented'
+        db.delete_table(u'movie_movierented')
+
 
     models = {
         u'movie.movie': {
             'Meta': {'object_name': 'Movie'},
             'actors': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['movie.MovieActor']", 'symmetrical': 'False'}),
             'additional_content': ('django.db.models.fields.TextField', [], {'null': 'True'}),
-            'api_id': ('django.db.models.fields.BigIntegerField', [], {'unique': 'True'}),
+            'api_id': ('django.db.models.fields.BigIntegerField', [], {'default': 'None', 'null': 'True'}),
             'categories': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['movie.MovieCategory']", 'symmetrical': 'False'}),
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
@@ -123,10 +149,11 @@ class Migration(SchemaMigration):
             'imdb_id': ('django.db.models.fields.BigIntegerField', [], {'null': 'True'}),
             'movie_internal_order': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
             'poster': ('django.db.models.fields.TextField', [], {'null': 'True'}),
-            'rating': ('django.db.models.fields.BigIntegerField', [], {'default': '0'}),
-            'release_year': ('django.db.models.fields.DateField', [], {}),
+            'rating': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'release_year': ('django.db.models.fields.DateField', [], {'null': 'True'}),
             'synopsy': ('django.db.models.fields.TextField', [], {'null': 'True'}),
-            'title': ('django.db.models.fields.TextField', [], {})
+            'title': ('django.db.models.fields.TextField', [], {}),
+            'trailer': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['movie.MovieTrailer']", 'null': 'True'})
         },
         u'movie.movieactor': {
             'Meta': {'object_name': 'MovieActor'},
@@ -138,12 +165,28 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.TextField', [], {})
         },
+        u'movie.movieold': {
+            'Meta': {'object_name': 'MovieOld'},
+            'movie': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['movie.Movie']", 'unique': 'True', 'primary_key': 'True'}),
+            'old_id': ('django.db.models.fields.BigIntegerField', [], {})
+        },
+        u'movie.movierented': {
+            'Meta': {'object_name': 'MovieRented'},
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'date_updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'moviestock': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['movie.MovieStock']"}),
+            'note': ('django.db.models.fields.TextField', [], {'null': 'True'}),
+            'renter': ('django.db.models.fields.TextField', [], {}),
+            'renterEmail': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True'})
+        },
         u'movie.moviestock': {
             'Meta': {'object_name': 'MovieStock'},
-            'Movie': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['movie.Movie']"}),
-            'MovieStockType': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['movie.MovieStockType']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'location': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True'}),
+            'movie': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['movie.Movie']"}),
+            'moviestocktype': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['movie.MovieStockType']"}),
+            'original': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'quantity': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'})
         },
         u'movie.moviestocktype': {
@@ -155,7 +198,6 @@ class Migration(SchemaMigration):
         u'movie.movietrailer': {
             'Meta': {'object_name': 'MovieTrailer'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'movie': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['movie.Movie']"}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         }
     }
