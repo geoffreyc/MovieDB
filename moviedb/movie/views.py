@@ -56,34 +56,37 @@ def import_old_movies(request):
             if key in old2new:
                 currmovie = old2new[key]
                 currmovie.actors.add(*value)
-    with open(BASE_DIR+'/movieDB/movie/asset/movie_categorie.csv', mode='rb') as csvfile:
-        spamreader = csv.reader(csvfile)
-        currentid = 0
-        currCat = None
-        for row in spamreader:
-            old_id = int(row[0])
-            if int(row[1]) != currentid:
-                currentid = int(row[1])
-                currCat = MovieCategory()
-                currCat.name = row[3]
-                currCat.save()
-            if old_id in old2new:
-                if old_id not in moviecats:
-                    moviecats[old_id] = []
-                moviecats[old_id].append(currCat)
-                #currmovie = old2new[old_id]
-                #currmovie.actors.add(currActor)
-                #currmovie.save()
-        for key, value in moviecats.iteritems():
-            if key in old2new:
-                currmovie = old2new[key]
-                currmovie.categories.add(*value)
+    #with open(BASE_DIR+'/movieDB/movie/asset/movie_categorie.csv', mode='rb') as csvfile:
+    #    spamreader = csv.reader(csvfile)
+    #    currentid = 0
+    #    currCat = None
+    #    for row in spamreader:
+    #        old_id = int(row[0])
+    #        if int(row[1]) != currentid:
+    #            currentid = int(row[1])
+    #            currCat = MovieCategory()
+    #            currCat.name = row[3]
+    #            currCat.save()
+    #        if old_id in old2new:
+    #            if old_id not in moviecats:
+    #                moviecats[old_id] = []
+    #            moviecats[old_id].append(currCat)
+    #            #currmovie = old2new[old_id]
+    #            #currmovie.actors.add(currActor)
+    #            #currmovie.save()
+    #    for key, value in moviecats.iteritems():
+    #        if key in old2new:
+    #            currmovie = old2new[key]
+    #            currmovie.categories.add(*value)
     with open(BASE_DIR+'/movieDB/movie/asset/movie_stocks.csv', mode='rb') as csvfile:
         spamreader = csv.reader(csvfile)
         stocklist = []
         for row in spamreader:
             stock = MovieStock()
-            stock.original = bool(row(3))
+            if int(row(3)) == 1:
+                stock.original = True
+            else:
+                stock.original = False
             stock.quantity = int(row(4))
             stock.location = row(5)
             stock.movie_id = old2new[int(row(1))].id
