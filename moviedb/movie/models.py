@@ -15,7 +15,6 @@ class Movie(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     categories = models.ManyToManyField("MovieCategory")
     actors = models.ManyToManyField("MovieActor")
-    trailer = models.ForeignKey("MovieTrailer", null=True)
 
 
 class MovieOld(models.Model):
@@ -35,7 +34,7 @@ class MovieCategory(models.Model):
 
 class MovieTrailer(models.Model):
     url = models.URLField(null=False)
-    #movie = models.ForeignKey(Movie)
+    movie = models.ForeignKey(Movie)
 
 
 class MovieStockType(models.Model):

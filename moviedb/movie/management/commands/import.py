@@ -102,3 +102,18 @@ class Command(BaseCommand):
                 stock.moviestocktype_id = int(row[2])
                 stocklist.append(stock)
             MovieStock.objects.bulk_create(stocklist)
+        with open(BASE_DIR+'/movieDB/movie/asset/movie_trailers.csv', mode='rb') as csvfile:
+            self.stdout.write("Importing Trailers...")
+            spamreader = csv.reader(csvfile)
+            trailerlist = []
+            for row in spamreader:
+                trailer = MovieTrailer()
+                url = "http://www.youtube.com/watch?v="
+                old_id = int(row[1])
+                if old_id in old2new:
+                    if row[2] == "youtube":
+                        url = url + row[3]
+                        trailer.url = url
+                        trailer.movie_id = old2new[old_id].id
+                        trailerlist.append(trailer)
+            MovieTrailer.objects.bulk_create(trailerlist)

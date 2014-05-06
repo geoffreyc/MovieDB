@@ -5,6 +5,8 @@ base.db
 .sass-cache/
 /static
 /media
+moviedb/resources/images/posters
+moviedb/resources/temp
 
 #############
 ## Python
