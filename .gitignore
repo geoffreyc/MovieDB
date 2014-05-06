@@ -5,6 +5,8 @@ base.db
 .sass-cache/
 /static
 /media
+moviedb/resources/images/posters
+moviedb/resources/temp
 
 #############
 ## Python
@@ -85,3 +87,4 @@ $RECYCLE.BIN/
 # Mac crap
 .DS_Store
 
+db.sqlite3.old

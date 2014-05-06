@@ -2,12 +2,12 @@ from django.db import models
 
 
 class Movie(models.Model):
-    api_id = models.BigIntegerField(unique=True)
+    api_id = models.BigIntegerField(null=True, default=None)
     imdb_id = models.BigIntegerField(null=True)
     title = models.TextField(null=False)
-    release_year = models.DateField(null=False)
+    release_year = models.DateField(null=True)
     synopsy = models.TextField(null=True)
-    rating = models.BigIntegerField(null=False, default=0)
+    rating = models.FloatField(null=False, default=0)
     poster = models.TextField(null=True)
     additional_content = models.TextField(null=True)
     movie_internal_order = models.PositiveIntegerField(null=False, default=1)
@@ -15,6 +15,12 @@ class Movie(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     categories = models.ManyToManyField("MovieCategory")
     actors = models.ManyToManyField("MovieActor")
+
+
+class MovieOld(models.Model):
+    movie = models.OneToOneField(Movie, primary_key=True)
+    old_id = models.BigIntegerField()
+
 
 class MovieActor(models.Model):
     name = models.TextField(null=False)
@@ -37,8 +43,9 @@ class MovieStockType(models.Model):
 
 
 class MovieStock(models.Model):
-    MovieStockType = models.ForeignKey(MovieStockType)
-    Movie = models.ForeignKey(Movie)
+    moviestocktype = models.ForeignKey(MovieStockType)
+    movie = models.ForeignKey(Movie)
+    original = models.BooleanField(default=True, null=False)
     quantity = models.PositiveSmallIntegerField(default=0, null=False)
     location = models.CharField(null=True, max_length=255)
 
