@@ -16,6 +16,15 @@ class Movie(models.Model):
     categories = models.ManyToManyField("MovieCategory")
     actors = models.ManyToManyField("MovieActor")
 
+    def hasStockType(self, stockcode):
+        stocks = self.moviestocks.all()
+        hasstocktype = False
+        stock = MovieStock()
+        for stock in stocks:
+            if stock.moviestocktype.code == stockcode:
+                hasstocktype = True
+        return hasstocktype
+
 
 class MovieOld(models.Model):
     movie = models.OneToOneField(Movie, primary_key=True)
@@ -44,7 +53,7 @@ class MovieStockType(models.Model):
 
 class MovieStock(models.Model):
     moviestocktype = models.ForeignKey(MovieStockType)
-    movie = models.ForeignKey(Movie)
+    movie = models.ForeignKey(Movie, related_name="moviestocks")
     original = models.BooleanField(default=True, null=False)
     quantity = models.PositiveSmallIntegerField(default=0, null=False)
     location = models.CharField(null=True, max_length=255)

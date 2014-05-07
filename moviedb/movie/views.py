@@ -8,9 +8,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def index(request):
-    moviePerPage = 60
-    movieList = Movie.objects.all()
-    paginator = Paginator(movieList, 60)
+    moviePerPage = 30
+    movieList = Movie.objects.all().order_by(*["title", "movie_internal_order"]).prefetch_related("moviestocks__moviestocktype")
+    paginator = Paginator(movieList, moviePerPage)
     page = request.GET.get('page')
     try:
         movies = paginator.page(page)
@@ -18,4 +18,5 @@ def index(request):
         movies = paginator.page(1)
     except EmptyPage:
         movies = paginator.page(paginator.num_pages)
-    return render(request, 'layouts/master.html', {})
+    contextdict = {'movies': movies, 'paginator': paginator, 'posterpath': POSTER_PATH}
+    return render(request, 'movies/listing.html',contextdict)

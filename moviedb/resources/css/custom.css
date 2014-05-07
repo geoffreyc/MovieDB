@@ -1,0 +1,43 @@
+.moviescontainer {
+    text-align: center;
+}
+.moviescontainer .movieblock{
+    display: inline-block;
+    width:230px;
+    margin: 15px;
+    vertical-align: top;
+    background-color: #000;
+    text-align: left;
+}
+.moviescontainer .movieblock .movieimage{
+    height:325px;
+    overflow: hidden;
+    position: relative;
+}
+.moviescontainer .movieblock .movieimage .movielabel{
+    height:30px;
+    width:30px;
+    position: absolute;
+    top:10px;
+    right:10px;
+}
+.moviescontainer .movieblock .movieimage .movielabel.hasBLUERAY{
+    background-image: url("../images/blu-ray.png");
+}
+.moviescontainer .movieblock .movieimage .movielabel.hasDVD{
+    background-image: url("../images/dvd.png");
+}
+.moviescontainer .movieblock .movieimage .movielabel.hasDVD.hasBLUERAY{
+    background-image: url("../images/all.png");
+}
+.moviescontainer .movieblock .movieimage img{
+    width:100%;
+}
+.moviescontainer .movieblock .movietitle{
+    padding: 5px;
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    height: 50px;
+    position: relative;
+}

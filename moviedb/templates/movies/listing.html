@@ -1,0 +1,41 @@
+{%  extends 'layouts/master.html' %}
+{% load static %}
+{% load bootstrap_pagination %}
+{% load movietags %}
+{% block htmltitle %}
+    Movies Listing | {{ block.super }}
+{% endblock %}
+{% block maincontent %}
+<div class="col-lg-12">
+    <h1 class="page-header">Movies Listing</h1>
+</div>
+<div class="col-lg-12">
+    <div class="filterbox">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default">DVD</button>
+            <button type="button" class="btn btn-default">Both</button>
+            <button type="button" class="btn btn-default">Blue-Ray</button>
+        </div>
+
+    </div>
+</div>
+<div class="col-lg-12">
+    <div class="moviescontainer"><!--
+        {% for movie in movies %}
+            --><div class="movieblock">
+                <div class="movieimage">
+                    <img src="{% static posterpath|add:movie.poster %}" alt="" />
+                    <div class="movielabel {{ movie|moviehastocktype:"DVD" }} {{ movie|moviehastocktype:"BLUERAY" }}"></div>
+                </div>
+                <div class="movietitle"><span class="title">{{ movie.title }}</span></div>
+            </div><!--
+        {% endfor %}
+    --></div>
+</div>
+<div class="col-lg-12">
+    <div class="pagination">
+        {% bootstrap_paginate movies range=10 show_prev_next="false" show_first_last="true" %}
+    </div>
+</div>
+
+{% endblock %}
