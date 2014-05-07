@@ -24,7 +24,8 @@
         {% for movie in movies %}
             --><div class="movieblock">
                 <div class="movieimage">
-                    <img src="{% static posterpath|add:movie.poster %}" alt="" />
+                    <!--<img src="{% static posterpath|add:movie.poster %}" alt="" />-->
+                    <img src="{% static "http://mark.geoffreyc.co.uk/resources/images/posters/"|add:movie.poster %}" alt="" />
                     <div class="movielabel {{ movie|moviehastocktype:"DVD" }} {{ movie|moviehastocktype:"BLUERAY" }}"></div>
                 </div>
                 <div class="movietitle"><span class="title">{{ movie.title }}</span></div>
