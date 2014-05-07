@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def index(request):
     moviePerPage = 30
-    movieList = Movie.objects.all().order_by(*["title", "movie_internal_order"]).prefetch_related("moviestocks__moviestocktype")
+    movieList = Movie.objects.all().order_by(*["title", "movie_internal_order"]).filter().prefetch_related("moviestocks__moviestocktype")
     paginator = Paginator(movieList, moviePerPage)
     page = request.GET.get('page')
     try:
