@@ -20,11 +20,27 @@ def buildfilterurl(getdict, **kwargs):
     uristr = []
     for key, value in getdict.iteritems():
         if key in kwargs:
-            uristr.append(key+"="+kwargs[key])
+            if kwargs[key]is not None:
+                uristr.append(key+"="+kwargs[key])
+            kwargs.pop(key, None)
         else:
+            uristr.append(key+"="+value)
+    for key, value in kwargs.iteritems():
+        if kwargs[key]is not None:
             uristr.append(key+"="+value)
     return "&".join(uristr)
 
 
+def isfilteractive(getdict, **kwargs):
+    isactive = ""
+    for key, value in kwargs.iteritems():
+        if key in getdict and getdict[key] == value:
+            isactive = "active"
+        elif key not in getdict and value is None:
+            isactive = "active"
+    return isactive
+
+
 register.filter('moviehastocktype', moviehastocktype)
 register.simple_tag(buildfilterurl, name="buildfilterurl")
+register.simple_tag(isfilteractive, name="isfilteractive")
