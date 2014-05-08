@@ -10,14 +10,68 @@
     <h1 class="page-header">Movies Listing</h1>
 </div>
 <div class="col-lg-12">
-    <div class="filterbox">
-        <div class="btn-group">
-            <a class="btn btn-default {% isfilteractive request.GET support="DVD" %}" href="{% url 'movieindex' %}?{% buildfilterurl request.GET support="DVD" %}">DVD</a>
-            <a class="btn btn-default {% isfilteractive request.GET support=None %}" href="{% url 'movieindex' %}?{% buildfilterurl request.GET support=None %}">Both</a>
-            <a class="btn btn-default {% isfilteractive request.GET support="BLUERAY" %}" href="{% url 'movieindex' %}?{% buildfilterurl request.GET support="BLUERAY" %}">Blue-Ray</a>
+    <div class="row">
+        <div class="col-md-4">
+            <div clss="row">
+                <div class="col-lg-12 filterlabelbox">
+                    <span class="filterlabel">Media Type</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="filterbox">
+                        <div class="btn-group">
+                            <a class="btn btn-default {% isfilteractive request.GET support=None %}" href="{% url 'movieindex' %}?{% buildfilterurl request.GET support=None %}">Both</a>
+                            <a class="btn btn-default {% isfilteractive request.GET support="DVD" %}" href="{% url 'movieindex' %}?{% buildfilterurl request.GET support="DVD" %}">DVD</a>
+                            <a class="btn btn-default {% isfilteractive request.GET support="BLUERAY" %}" href="{% url 'movieindex' %}?{% buildfilterurl request.GET support="BLUERAY" %}">Blue-Ray</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <div class="col-md-4">
+            <div clss="row">
+                <div class="col-lg-12 filterlabelbox">
+                    <span class="filterlabel">Actor</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-remove"></i></button>
+                        </span>
+                        <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+        </div><!-- /.col-lg-6 -->
+        <div class="col-md-4">
+            <div clss="row">
+                <div class="col-lg-12 filterlabelbox">
+                    <span class="filterlabel">Search</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-remove"></i></button>
+                        </span>
+                        <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+        </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
 
-    </div>
+
 </div>
 <div class="col-lg-12">
     <div class="moviescontainer"><!--

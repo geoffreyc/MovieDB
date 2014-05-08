@@ -3,7 +3,7 @@
 }
 .moviescontainer .movieblock{
     display: inline-block;
-    width:220px;
+    width:210px;
     margin: 15px;
     vertical-align: top;
     background-color: #000;
@@ -40,4 +40,10 @@
     font-weight: bold;
     height: 50px;
     position: relative;
+}
+.filterlabelbox{
+    text-align: center;
+}
+.filterbox{
+    text-align: center;
 }
