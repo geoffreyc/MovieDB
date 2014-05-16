@@ -10,6 +10,7 @@
     <h1 class="page-header">Movies Listing</h1>
 </div>
 <div class="col-lg-12">
+    <form class="" action="{% url 'movieindex' %}?{% buildfilterurl request.GET actors=None search=None %}" method="get">
     <div class="row">
         <div class="col-md-4">
             <div clss="row">
@@ -41,9 +42,9 @@
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-remove"></i></button>
                         </span>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" name="actors">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Go!</button>
+                            <button class="btn btn-default" type="submit">Go!</button>
                         </span>
                     </div><!-- /input-group -->
                 </div>
@@ -61,16 +62,21 @@
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-remove"></i></button>
                         </span>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" name="search">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Go!</button>
+                            <button class="btn btn-default" type="submit">Go!</button>
                         </span>
                     </div><!-- /input-group -->
                 </div>
             </div>
         </div><!-- /.col-lg-6 -->
     </div><!-- /.row -->
-
+    {% for key, value in request.GET.items %}
+        {% if key != "actors" and key != "search" %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}" />
+        {% endif %}
+    {% endfor %}
+    </form>
 
 </div>
 <div class="col-lg-12">
